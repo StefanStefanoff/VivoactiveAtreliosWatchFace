@@ -1,0 +1,5 @@
+<fonts>
+	<font id="watchface" filename="watchface.fnt" />
+	<font id="moon_font" filename="moon.fnt" antialias="true"/>
+	<font id="tiny_font" filename="tiny.fnt" antialias="true"/>
+</fonts>  

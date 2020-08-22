@@ -1,0 +1,52 @@
+<layout id="WatchFace">	    
+	<label id="stepsGoal" x="172" y="47" text="" font="@Fonts.tiny_font" justification="Graphics.TEXT_JUSTIFY_LEFT" color="0xFFFFFF"/>
+	<drawable class="StepsGoalGraph">
+		<param name="width">90</param>
+		<param name="x">75</param>
+		<param name="y">54</param>
+	</drawable> 
+	<label id="steps" x="67" y="47" text="" font="@Fonts.tiny_font" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="0xFFFFFF"/>
+	
+	<drawable class="Heart">
+		<param name="x">65</param>
+		<param name="y">30</param>
+	</drawable>
+    <label id="hr" x="75" y="20" text="0000" font="Graphics.FONT_XTINY" justification="Graphics.TEXT_JUSTIFY_LEFT" color="0xFFFFFF" />   
+    
+    <drawable class="Pressure">
+		<param name="x">135</param>
+		<param name="y">32</param>
+	</drawable>
+    <label id="pressure" x="145" y="20" text="-" font="Graphics.FONT_XTINY" justification="Graphics.TEXT_JUSTIFY_LEFT" color="0xFFFFFF" />  
+
+    <drawable class="BluetoothIndicator">
+    	<param name="x">50</param>
+    	<param name="y">179</param>
+    </drawable>
+    <label id="moon" x="195" y="174" font="@Fonts.moon_font" color="0xFFFFFF"/>
+    <drawable class="BatteryIndicator">
+    	<param name="x">95</param>
+    	<param name="y">5</param>
+    </drawable>
+    <label id="batteryPercent" x="120" y= "2" font="@Fonts.tiny_font" justification="Graphics.TEXT_JUSTIFY_LEFT" color="0xFFFFFF"/>
+    <label id="time" x="center" y="center" font="@Fonts.watchface" justification="Graphics.TEXT_JUSTIFY_CENTER" color="0xFFFFFF"/>
+    
+    <label id="date" x="center" y= "175" text="" font="Graphics.FONT_XTINY" justification="Graphics.TEXT_JUSTIFY_CENTER" color="0xFFFFFF"/>
+        
+    <drawable class="Distance">
+		<param name="x">60</param>
+		<param name="y">210</param>
+	</drawable>
+    <label id="dist" x="75" y="200" text="0000" font="Graphics.FONT_XTINY" justification="Graphics.TEXT_JUSTIFY_LEFT" color="0xFFFFFF" />
+
+	<drawable class="Altitude">
+		<param name="x">135</param>
+		<param name="y">210</param>
+	</drawable>
+    <label id="altitude" x="145" y="200" text="0000" font="Graphics.FONT_XTINY" justification="Graphics.TEXT_JUSTIFY_LEFT" color="0xFFFFFF" />
+       
+    <drawable class="Notification">
+    	<param name="x">10</param>
+		<param name="y">120</param>
+    </drawable>
+</layout>
