@@ -14,7 +14,7 @@ class Vivoactive3WatchFaceView extends WatchUi.WatchFace {
 	var altitude = null;
 	var lastHr = 0;
 	var hrText = null;
-	var hrUpdateInterval = 1;//seconds
+	var hrUpdateInterval = 20;//seconds
 
     function initialize() {
         WatchFace.initialize();
@@ -109,7 +109,7 @@ class Vivoactive3WatchFaceView extends WatchUi.WatchFace {
 
 	function onPartialUpdate(dc) {	
 		// Get current heartRate and show it
-		if ((System.getClockTime().sec % 5) == 0) {
+		if ((System.getClockTime().sec % hrUpdateInterval) == 0) {
 			var currentHr = Activity.getActivityInfo().currentHeartRate;
 			if (currentHr != lastHr) {
 				lastHr = currentHr;
@@ -144,12 +144,10 @@ class Vivoactive3WatchFaceView extends WatchUi.WatchFace {
 
     // The user has just looked at their watch. Timers and animations may be started here.
     function onExitSleep() {
-    	hrUpdateInterval = 1;
     }
 
     // Terminate any active timers and prepare for slow updates.
     function onEnterSleep() {
-    	hrUpdateInterval = 5;
     }
 
 	function getMoonPhase(timeNow) {
