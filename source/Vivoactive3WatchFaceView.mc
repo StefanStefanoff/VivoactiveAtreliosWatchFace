@@ -11,10 +11,13 @@ using Toybox.Math as Math;
 class Vivoactive3WatchFaceView extends WatchUi.WatchFace {
 	var moonPhase = false;
 	var pressure = null;
-	var altitude = null;
 	var lastHr = 0;
-	var hrText = null;
-	var hrUpdateInterval = 20;//seconds
+	var hrUpdateInterval = 30;//seconds
+	var dateSet = null;
+	var batterySet = null;
+	var altitude = null;
+	
+	var time, hrText, diText, prText, alText, moon, stepsGoal, steps, date, battery;
 
     function initialize() {
         WatchFace.initialize();
@@ -23,6 +26,18 @@ class Vivoactive3WatchFaceView extends WatchUi.WatchFace {
     // Load your resources here
     function onLayout(dc) {
         setLayout(Rez.Layouts.WatchFace(dc));
+        
+        time = View.findDrawableById("time");
+        hrText = View.findDrawableById("hr");
+        diText = View.findDrawableById("dist");
+        prText = View.findDrawableById("pressure");
+        alText = View.findDrawableById("altitude");
+        moon = View.findDrawableById("moon");
+        stepsGoal = View.findDrawableById("stepsGoal");
+        steps = View.findDrawableById("steps");
+        date = View.findDrawableById("date");
+        battery = View.findDrawableById("batteryPercent");
+                
     }
 
     // Called when this View is brought to the foreground. Restore
@@ -34,31 +49,33 @@ class Vivoactive3WatchFaceView extends WatchUi.WatchFace {
     // Update the view
     function onUpdate(dc) {
     	dc.clearClip();
+    	
+    	var hour = System.getClockTime().hour;
+    	var min = System.getClockTime().min; 
+    	var sec = System.getClockTime().sec;
+    	
+    	var activityInfo = Activity.getActivityInfo();
+    	var info = ActivityMonitor.getInfo();
+    	
         // Get and show the current time
-        var clockTime = System.getClockTime();
-        var timeString = Lang.format("$1$:$2$", [clockTime.hour.format("%02d"), clockTime.min.format("%02d")]);
-        var time = View.findDrawableById("time");
+        var timeString = Lang.format("$1$:$2$", [hour.format("%02d"), min.format("%02d")]);
         time.setText(timeString);
 
 		// Get current heartRate and show it
-		hrText = View.findDrawableById("hr");
-		var currentHr = Activity.getActivityInfo().currentHeartRate;
+		var currentHr = activityInfo.currentHeartRate;
 		if (currentHr != null) {
 			hrText.setText(Lang.format("$1$", [currentHr]));
 		} else {
 			hrText.setText("-");
 		}
 		
-		var info = ActivityMonitor.getInfo();
 		var distance = (info != null && info.distance != null) ? info.distance.toFloat() : 0;
 		var distanceKm = (distance/100000).format("%2.1f");
-		var diText = View.findDrawableById("dist");
 		diText.setText(distanceKm);
 		
 		// Get current pressure and show it
-		if (pressure == null || System.getClockTime().min == 0 && System.getClockTime().sec == 0) {
-			var prText = View.findDrawableById("pressure");
-			pressure = Activity.getActivityInfo().ambientPressure;
+		if (pressure == null || min == 0 && sec == 0) {
+			pressure = activityInfo.ambientPressure;
 			if (pressure != null) {
 				prText.setText(Lang.format("$1$", [Math.floor(pressure/100).toLong()]));
 			} else {
@@ -67,74 +84,42 @@ class Vivoactive3WatchFaceView extends WatchUi.WatchFace {
 		}
 		
 		// Get current altitude and show it
-		if (altitude == null || System.getClockTime().min == 0 && System.getClockTime().sec == 0) {
-			var alText = View.findDrawableById("altitude");
-			altitude = Activity.getActivityInfo().altitude;
-			if (altitude != null) {
-				alText.setText(Lang.format("$1$", [Math.floor(altitude).toLong()]));
-			} else {
-				alText.setText("-");
-			}
+		altitude = activityInfo.altitude;
+		if (altitude != null) {
+			alText.setText(Lang.format("$1$", [Math.floor(altitude).toLong()]));
+		} else {
+			alText.setText("-");
 		}
 		
 		// Get MoonPhase and show it
-		if (moonPhase == false || System.getClockTime().min == 0 && System.getClockTime().sec == 0) {
-			var moon = View.findDrawableById("moon");
+		if (moonPhase == false || (hour % 3 == 0) && min == 0 && sec == 0) {
 			moon.setText((getMoonPhase(Time.now())).toChar().toString());
 		}    
 		
-		var stepsGoal = View.findDrawableById("stepsGoal");
 		stepsGoal.setText(info.stepGoal.toString());
-		var steps = View.findDrawableById("steps");
 		steps.setText(info.steps.toString());
 		
-		var date = View.findDrawableById("date");
-		var today = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
-		var dateString = Lang.format(
-		    "$1$ $2$ $3$ $4$",
-		    [
-		        today.day_of_week,
-		        today.month,
-		        today.day,
-		        today.year
-		    ]
-		);
-		date.setText(dateString);
-		    
-	    var battery = View.findDrawableById("batteryPercent");
-	    battery.setText(Lang.format("$1$%", [System.getSystemStats().battery.toLong()]));
+		if (dateSet == null || hour == 0 && min == 0 && sec == 0) {
+			var today = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
+			var dateString = Lang.format(
+			    "$1$ $2$ $3$ $4$",
+			    [
+			        today.day_of_week,
+			        today.month,
+			        today.day,
+			        today.year
+			    ]
+			);
+			date.setText(dateString);
+		}
+		
+    	if (batterySet == null || min % 5 == 0 && sec == 0) {
+	    	battery.setText(Lang.format("$1$%", [System.getSystemStats().battery.toLong()]));
+    	}
+	    
         // Call the parent onUpdate function to redraw the layout
         View.onUpdate(dc);
     }
-
-	function onPartialUpdate(dc) {	
-		// Get current heartRate and show it
-		if ((System.getClockTime().sec % hrUpdateInterval) == 0) {
-			var currentHr = Activity.getActivityInfo().currentHeartRate;
-			if (currentHr != lastHr) {
-				lastHr = currentHr;
-				if (hrText == null) {
-					hrText = View.findDrawableById("hr");
-				}
-				var w = 40;
-			    var h = hrText.height;
-			    var y = hrText.locY;
-			    // The text is aligned to the right, so subtract the width to get x.
-			    var x = hrText.locX;
-			    dc.setClip(x, y, w, h);
-			
-			    dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
-			    dc.fillRectangle(x, y, w, h);
-				if (currentHr != null) {
-					hrText.setText(Lang.format("$1$", [currentHr]));
-					hrText.draw(dc);
-				} else {
-					hrText.setText("-");
-					hrText.draw(dc);
-				}
-			}
-		}
-	}
 
     // Called when this View is removed from the screen. Save the
     // state of this View here. This includes freeing resources from
