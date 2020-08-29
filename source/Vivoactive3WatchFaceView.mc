@@ -93,7 +93,8 @@ class Vivoactive3WatchFaceView extends WatchUi.WatchFace {
 		
 		// Get MoonPhase and show it
 		if (moonPhase == false || (hour % 3 == 0) && min == 0 && sec == 0) {
-			moon.setText((getMoonPhase(Time.now())).toChar().toString());
+			moonPhase = (getMoonPhase(Time.now())).toChar().toString();
+			moon.setText(moonPhase);
 		}    
 		
 		stepsGoal.setText(info.stepGoal.toString());
@@ -110,11 +111,13 @@ class Vivoactive3WatchFaceView extends WatchUi.WatchFace {
 			        today.year
 			    ]
 			);
-			date.setText(dateString);
+			dateSet = dateString;
+			date.setText(dateSet);
 		}
 		
     	if (batterySet == null || min % 5 == 0 && sec == 0) {
-	    	battery.setText(Lang.format("$1$%", [System.getSystemStats().battery.toLong()]));
+    		batterySet = Lang.format("$1$%", [System.getSystemStats().battery.toLong()]);
+	    	battery.setText(batterySet);
     	}
 	    
         // Call the parent onUpdate function to redraw the layout
@@ -141,7 +144,7 @@ class Vivoactive3WatchFaceView extends WatchUi.WatchFace {
     	var Age = IP * 29.53d;
     	var phase = 0;
 
-        return Math.floor(96 + 26*(Age/29.53)).toNumber();
+        return (96 + 26*(Age/29.53)).toNumber();
 	}
 	
 	static function Normalize(value)
