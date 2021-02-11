@@ -7,6 +7,8 @@
 	</drawable> 
 	<label id="steps" x="67" y="47" text="" font="@Fonts.tiny_font" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="0xFFFFFF"/>
 	
+	<label id="movement" x="120" y="56" text="" font="@Fonts.tiny_font" justification="Graphics.TEXT_JUSTIFY_CENTER" color="0xFF0000"/>
+	
 	<drawable class="Heart">
 		<param name="x">65</param>
 		<param name="y">30</param>

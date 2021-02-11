@@ -16,6 +16,7 @@ class Vivoactive3WatchFaceView extends WatchUi.WatchFace {
 	var dateSet = null;
 	var batterySet = null;
 	var altitude = null;
+	var movement = null;
 	
 	var time, hrText, diText, prText, alText, moon, stepsGoal, steps, date, battery;
 
@@ -37,6 +38,7 @@ class Vivoactive3WatchFaceView extends WatchUi.WatchFace {
         steps = View.findDrawableById("steps");
         date = View.findDrawableById("date");
         battery = View.findDrawableById("batteryPercent");
+        movement = View.findDrawableById("movement");
                 
     }
 
@@ -56,6 +58,19 @@ class Vivoactive3WatchFaceView extends WatchUi.WatchFace {
     	
     	var activityInfo = Activity.getActivityInfo();
     	var info = ActivityMonitor.getInfo();
+    	
+    	var moveBarLevel = info.moveBarLevel; //0..5
+
+    	var mvtTxt = "";
+    	for (var i = 0; i < moveBarLevel; i++) {
+    		if (i == 0) {
+    			mvtTxt += "-";
+    		} else {
+    			mvtTxt += "-";
+    		}
+		}
+    	
+    	movement.setText(mvtTxt);
     	
         // Get and show the current time
         var timeString = Lang.format("$1$:$2$", [hour.format("%02d"), min.format("%02d")]);
