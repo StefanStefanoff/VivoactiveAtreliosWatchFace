@@ -1,4 +1,5 @@
 <layout id="WatchFace">	    
+	<label id="movement" x="120" y="42" text="" justification="Graphics.TEXT_JUSTIFY_CENTER" color="0xFF0000"/>
 	<label id="stepsGoal" x="172" y="47" text="" font="@Fonts.tiny_font" justification="Graphics.TEXT_JUSTIFY_LEFT" color="0xFFFFFF"/>
 	<drawable class="StepsGoalGraph">
 		<param name="width">90</param>
@@ -6,8 +7,6 @@
 		<param name="y">54</param>
 	</drawable> 
 	<label id="steps" x="67" y="47" text="" font="@Fonts.tiny_font" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="0xFFFFFF"/>
-	
-	<label id="movement" x="120" y="56" text="" font="@Fonts.tiny_font" justification="Graphics.TEXT_JUSTIFY_CENTER" color="0xFF0000"/>
 	
 	<drawable class="Heart">
 		<param name="x">65</param>
